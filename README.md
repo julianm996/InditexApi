@@ -15,6 +15,12 @@ API REST construida para consultar el precio aplicable de un producto según mar
 - MapStruct, Lombok
 
 ---
+## Requisitos previos
+
+- Java 21 instalado
+- Maven 3.8+ instalado
+- Docker (opcional, si se desea ejecutar en contenedor)
+---
 
 ## Ejecución local
 
