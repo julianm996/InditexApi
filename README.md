@@ -1,3 +1,4 @@
+
 # Inditex Price API
 
 API REST construida para consultar el precio aplicable de un producto según marca, fecha y prioridad. Proyecto basado en arquitectura hexagonal.
@@ -19,55 +20,37 @@ API REST construida para consultar el precio aplicable de un producto según mar
 
 1. Clonar el repositorio:
 
-```bash
-git clone https://github.com/julianm996/InditexApi.git
-cd InditexApi
-```
+    git clone https://github.com/julianm996/InditexApi.git
+    cd InditexApi
 
 2. Compilar el proyecto:
 
-```bash
-mvn clean install
-```
+    mvn clean install
 
 3. Ejecutar la aplicación:
 
-```bash
-mvn spring-boot:run
-```
+    mvn spring-boot:run
 
-La API estará disponible en:  
-http://localhost:8080
-
-Swagger UI disponible en:  
-http://localhost:8080/swagger-ui.html
-
-Consola H2 (base de datos en memoria):  
-http://localhost:8080/h2-console  
-- JDBC URL: `jdbc:h2:mem:prices_db`  
-- User: `sa`  
-- Password: (vacío)
+- La API estará disponible en: http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- H2 Console: http://localhost:8080/h2-console
+  (JDBC URL: jdbc:h2:mem:prices_db, usuario: sa, sin contraseña)
 
 ---
 
 ## Ejecución con Docker
 
-El `Dockerfile` se encuentra en la carpeta raíz del proyecto.
+El Dockerfile se encuentra en la carpeta raíz del proyecto.
 
-### 1. Construir la imagen:
+1. Construir la imagen:
 
-```bash
-docker build -t price-api .
-```
+    docker build -t price-api .
 
-### 2. Ejecutar el contenedor:
+2. Ejecutar el contenedor:
 
-```bash
-docker run -p 8080:8080 price-api
-```
+    docker run -p 8080:8080 price-api
 
-Esto desplegará la aplicación en:  
-http://localhost:8080
+Aplicación desplegada en: http://localhost:8080
 
 ---
 
@@ -75,15 +58,51 @@ http://localhost:8080
 
 Ejecutar todos los tests:
 
-```bash
-mvn test
-```
+    mvn test
 
 Incluye:
-
 - Tests unitarios
 - Tests de integración
-- Tests funcionales/E2E
+- Tests funcionales / E2E con MockMvc
+
+---
+
+## Ejemplos de uso con curl
+
+### 1. Obtener el precio aplicable el 14 de junio a las 10:00h
+
+    curl -X GET "http://localhost:8080/prices/applicable?productId=35455&brandId=1&date=2020-06-14T10:00:00" -H "accept: application/json"
+
+### 2. Obtener el precio con mayor prioridad el 14 de junio a las 16:00h
+
+    curl -X GET "http://localhost:8080/prices/applicable?productId=35455&brandId=1&date=2020-06-14T16:00:00" -H "accept: application/json"
+
+### 3. Producto no existente
+
+    curl -X GET "http://localhost:8080/prices/applicable?productId=99999&brandId=1&date=2020-06-14T10:00:00" -H "accept: application/json"
+
+### 4. Formato de fecha inválido
+
+    curl -X GET "http://localhost:8080/prices/applicable?productId=35455&brandId=1&date=not-a-date" -H "accept: application/json"
+
+---
+
+## Cómo probar la API con Postman
+
+1. Abrir Postman
+2. Crear una nueva petición `GET`
+3. Usar esta URL:
+
+    http://localhost:8080/prices/applicable?productId=35455&brandId=1&date=2020-06-14T10:00:00
+
+4. Seleccionar el método `GET`
+5. Asegúrate de establecer los headers:
+    - Key: `accept`
+    - Value: `application/json`
+
+6. Haz clic en **Send**
+
+Puedes probar los demás casos cambiando el parámetro `date`, `productId` o `brandId` como en los ejemplos anteriores.
 
 ---
 
@@ -91,14 +110,19 @@ Incluye:
 
 La API gestiona errores comunes como:
 
-- Precio no encontrado
-- Fecha con formato inválido
-- Parámetros faltantes
+- Precio no encontrado (404)
+- Fecha con formato inválido (400)
+- Parámetros faltantes (400)
 
-Se devuelven respuestas con estructura estándar: timestamp, mensaje y código de estado HTTP.
+Se devuelve un objeto con:
+
+- timestamp
+- message
+- status
 
 ---
 
 ## Autor
-*Julian Melgarejo*
+
+Julian Melgarejo  
 Repositorio: https://github.com/julianm996/InditexApi
