@@ -80,10 +80,10 @@ public class PriceApiE2ETest {
     @Test
     public void should_return_404_when_no_price_is_found() throws Exception {
         mockMvc.perform(get("/prices/applicable")
-                        .param("productId", "99999") // no existe en los datos
+                        .param("productId", "99999")
                         .param("brandId", "1")
                         .param("date", "2020-06-14T10:00:00"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("No applicable price found for productId=99999, brandId=1, date=2020-06-14T10:00"));
+                .andExpect(jsonPath("$.message").value("No se encontró un precio aplicable para el productId=99999, brandId=1, date=2020-06-14T10:00"));
     }
 }

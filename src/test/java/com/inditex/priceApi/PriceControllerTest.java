@@ -82,13 +82,13 @@ public class PriceControllerTest {
     public void should_return_404_when_price_not_found() throws Exception {
         when(priceService.getApplicablePrice(99999, 1, LocalDateTime.parse("2020-06-14T10:00:00")))
                 .thenThrow(new com.inditex.priceApi.infraestructure.exceptions.PriceException(
-                        "No applicable price found for productId=99999, brandId=1, date=2020-06-14T10:00"));
+                        "No se encontró un precio aplicable para el productId=99999, brandId=1, date=2020-06-14T10:00"));
 
         mockMvc.perform(get("/prices/applicable")
                         .param("productId", "99999")
                         .param("brandId", "1")
                         .param("date", "2020-06-14T10:00:00"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("No applicable price found for productId=99999, brandId=1, date=2020-06-14T10:00"));
+                .andExpect(jsonPath("$.message").value("No se encontró un precio aplicable para el productId=99999, brandId=1, date=2020-06-14T10:00"));
     }
 }

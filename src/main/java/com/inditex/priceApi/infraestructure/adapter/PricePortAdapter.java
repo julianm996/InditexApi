@@ -27,7 +27,7 @@ public class PricePortAdapter implements PricePort {
                         .findTopByProductIdAndBrandIdAndApplicationDate(
                                 productId,brandId,applicationDate)
                         .orElseThrow(() -> new PriceException(
-                                "No applicable price found for productId=" + productId + ", brandId=" + brandId + ", date=" + applicationDate)
+                                "No se encontró un precio aplicable para el productId=" + productId + ", brandId=" + brandId + ", date=" + applicationDate)
                         ));
     }
 
