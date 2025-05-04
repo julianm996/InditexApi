@@ -1,0 +1,14 @@
+openapi: 3.0.1
+info:
+  title: "Price API"
+  description: "API para la gestión de precios en Inditex"
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /prices:
+    get:
+      summary: "Obtener lista de precios"
+      responses:
+        "200":
+          description: "Lista de precios"
