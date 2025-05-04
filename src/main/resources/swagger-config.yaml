@@ -1,14 +1,86 @@
 openapi: 3.0.1
 info:
   title: "Price API"
-  description: "API para la gestión de precios en Inditex"
+  description: "API para la gestión de precios en Inditex. Permite consultar el precio aplicable de un producto en una fecha dada y para una marca concreta."
   version: "1.0.0"
+
 servers:
   - url: http://localhost:8080
+
 paths:
-  /prices:
+  /prices/applicable:
     get:
-      summary: "Obtener lista de precios"
+      summary: Obtener el precio aplicable
+      description: Devuelve el precio más relevante según la fecha proporcionada, el ID del producto y el ID de la marca.
+      parameters:
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID del producto
+          example: 35455
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID de la marca
+          example: 1
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Fecha de aplicación en formato ISO (yyyy-MM-dd'T'HH:mm:ss)
+          example: 2020-06-14T10:00:00
       responses:
         "200":
-          description: "Lista de precios"
+          description: Precio encontrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+        "400":
+          description: Error en los parámetros de entrada
+        "404":
+          description: Precio no encontrado para los criterios especificados
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Brand:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    Price:
+      type: object
+      properties:
+        id:
+          type: integer
+        brand:
+          $ref: '#/components/schemas/Brand'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        priceList:
+          type: integer
+        productId:
+          type: integer
+        priority:
+          type: integer
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          enum: [EUR, USD, GBP]
